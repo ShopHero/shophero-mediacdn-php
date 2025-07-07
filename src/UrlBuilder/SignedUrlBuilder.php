@@ -54,6 +54,9 @@ class SignedUrlBuilder extends UrlBuilder
         // Add expiration to params
         $this->params['exp'] = time() + $this->expiresIn;
 
+        // Sort parameters for consistent signature generation
+        ksort($this->params);
+
         // Build URL without signature
         $protocol = $this->useHttps ? 'https' : 'http';
         $baseUrl = $protocol . '://' . $this->domain . '/' . $this->path;
@@ -101,6 +104,9 @@ class SignedUrlBuilder extends UrlBuilder
         // Recreate signature
         $signature = $params['sig'];
         unset($params['sig']);
+        
+        // Sort parameters for consistent signature validation
+        ksort($params);
         
         $queryString = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
         $stringToSign = $parsedUrl['path'] . '?' . $queryString;

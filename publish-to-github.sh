@@ -3,7 +3,7 @@ set -e
 
 # Configuration
 REPO_URL="git@github.com:ShopHero/shophero-mediacdn-php.git"
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 echo "📦 Preparing to publish ShopHero MediaCDN PHP SDK v${VERSION}"
 echo "=================================================="
