@@ -6,8 +6,8 @@ use ShopHero\MediaCDN\MediaCDNClient;
 use ShopHero\MediaCDN\UrlBuilder\SignedUrlBuilder;
 
 // Initialize client with PSK credentials
-$client = new MediaCDNClient('d18ixy3vlla0t9.cloudfront.net', [
-    'sourceId' => 'source-123',
+// Use your source's subdomain (e.g., 'my-source.mediacdn.example.com')
+$client = new MediaCDNClient('my-source.mediacdn.example.com', [
     'psk' => 'your-pre-shared-key-here'
 ]);
 
@@ -58,5 +58,5 @@ foreach ($galleryImages as $imagePath) {
 }
 
 // Example of URL that will be rejected (unsigned)
-$unsignedUrl = "https://d18ixy3vlla0t9.cloudfront.net/secure/private-image.jpg?w=800&h=600";
+$unsignedUrl = "https://my-source.mediacdn.example.com/secure/private-image.jpg?w=800&h=600";
 echo "\nUnsigned URL (will be rejected): " . $unsignedUrl . "\n";

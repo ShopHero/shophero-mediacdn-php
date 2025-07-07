@@ -11,14 +11,12 @@ namespace ShopHero\MediaCDN\UrlBuilder;
  */
 class SignedUrlBuilder extends UrlBuilder
 {
-    private string $sourceId;
     private string $psk;
     private int $expiresIn = 3600; // Default 1 hour
 
-    public function __construct(string $domain, string $path, string $sourceId, string $psk)
+    public function __construct(string $domain, string $path, string $psk)
     {
         parent::__construct($domain, $path);
-        $this->sourceId = $sourceId;
         $this->psk = $psk;
     }
 
@@ -53,8 +51,7 @@ class SignedUrlBuilder extends UrlBuilder
      */
     public function build(): string
     {
-        // Add source and expiration to params
-        $this->params['source'] = $this->sourceId;
+        // Add expiration to params
         $this->params['exp'] = time() + $this->expiresIn;
 
         // Build URL without signature
@@ -92,7 +89,7 @@ class SignedUrlBuilder extends UrlBuilder
         parse_str($parsedUrl['query'], $params);
         
         // Check required parameters
-        if (!isset($params['sig'], $params['exp'], $params['source'])) {
+        if (!isset($params['sig'], $params['exp'])) {
             return false;
         }
 

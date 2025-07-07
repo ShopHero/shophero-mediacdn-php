@@ -15,7 +15,6 @@ use ShopHero\MediaCDN\UrlBuilder\SignedUrlBuilder;
 class MediaCDNClient
 {
     private string $domain;
-    private ?string $sourceId;
     private ?string $psk;
     private bool $useHttps;
     private bool $autoFormat;
@@ -23,13 +22,12 @@ class MediaCDNClient
     /**
      * Create a new MediaCDN client instance
      * 
-     * @param string $domain The CloudFront domain (e.g., 'd25qhvduguk481.cloudfront.net')
+     * @param string $domain The CloudFront domain or subdomain (e.g., 'my-source.mediacdn.example.com')
      * @param array $options Configuration options
      */
     public function __construct(string $domain, array $options = [])
     {
         $this->domain = rtrim($domain, '/');
-        $this->sourceId = $options['sourceId'] ?? null;
         $this->psk = $options['psk'] ?? null;
         $this->useHttps = $options['useHttps'] ?? true;
         $this->autoFormat = $options['autoFormat'] ?? true;
@@ -44,7 +42,7 @@ class MediaCDNClient
     public function createUrl(string $path): UrlBuilder
     {
         $builder = $this->requiresSigning() 
-            ? new SignedUrlBuilder($this->domain, $path, $this->sourceId, $this->psk)
+            ? new SignedUrlBuilder($this->domain, $path, $this->psk)
             : new UrlBuilder($this->domain, $path);
 
         $builder->setUseHttps($this->useHttps);
@@ -56,17 +54,6 @@ class MediaCDNClient
         return $builder;
     }
 
-    /**
-     * Set the source ID for signed URLs
-     * 
-     * @param string $sourceId
-     * @return self
-     */
-    public function setSourceId(string $sourceId): self
-    {
-        $this->sourceId = $sourceId;
-        return $this;
-    }
 
     /**
      * Set the PSK for signed URLs
@@ -111,7 +98,7 @@ class MediaCDNClient
      */
     private function requiresSigning(): bool
     {
-        return $this->sourceId !== null && $this->psk !== null;
+        return $this->psk !== null;
     }
 
     /**

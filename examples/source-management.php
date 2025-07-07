@@ -6,11 +6,11 @@ use ShopHero\MediaCDN\MediaCDNClient;
 use ShopHero\MediaCDN\Exception\ApiException;
 
 // Initialize client
-$client = new MediaCDNClient('d18ixy3vlla0t9.cloudfront.net');
+$client = new MediaCDNClient('cdn.example.com');
 
 // Create source manager
 $sourceManager = $client->createSourceManager(
-    'https://f830zq0b47.execute-api.us-east-1.amazonaws.com/prod',
+    'https://api.example.com',
     'your-api-key-here'
 );
 

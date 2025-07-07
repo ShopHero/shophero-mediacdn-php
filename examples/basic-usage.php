@@ -5,7 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use ShopHero\MediaCDN\MediaCDNClient;
 
 // Initialize the client
-$client = new MediaCDNClient('d18ixy3vlla0t9.cloudfront.net');
+$client = new MediaCDNClient('cdn.example.com');
 
 // Basic image transformation
 $basicUrl = $client->createUrl('/samples/landscape.jpg')
