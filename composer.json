@@ -1,0 +1,48 @@
+{
+    "name": "shophero/mediacdn-php",
+    "description": "PHP client library for ShopHero MediaCDN - A high-performance image CDN with on-the-fly transformations",
+    "type": "library",
+    "keywords": ["cdn", "image", "media", "transformation", "shophero", "imgix", "cloudinary"],
+    "homepage": "https://github.com/ShopHero/shophero-mediacdn-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ShopHero",
+            "email": "support@shophero.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-hash": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpstan/phpstan": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShopHero\\MediaCDN\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ShopHero\\MediaCDN\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "phpcs": "vendor/bin/phpcs --standard=PSR12 src tests",
+        "phpstan": "vendor/bin/phpstan analyse src --level=8",
+        "check": [
+            "@phpcs",
+            "@phpstan",
+            "@test"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

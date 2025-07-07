@@ -1,0 +1,115 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ShopHero\MediaCDN\UrlBuilder;
+
+/**
+ * Signed URL Builder for secure MediaCDN access
+ * 
+ * @package ShopHero\MediaCDN\UrlBuilder
+ */
+class SignedUrlBuilder extends UrlBuilder
+{
+    private string $sourceId;
+    private string $psk;
+    private int $expiresIn = 3600; // Default 1 hour
+
+    public function __construct(string $domain, string $path, string $sourceId, string $psk)
+    {
+        parent::__construct($domain, $path);
+        $this->sourceId = $sourceId;
+        $this->psk = $psk;
+    }
+
+    /**
+     * Set expiration time in seconds
+     * 
+     * @param int $seconds
+     * @return self
+     */
+    public function expiresIn(int $seconds): self
+    {
+        $this->expiresIn = $seconds;
+        return $this;
+    }
+
+    /**
+     * Set expiration to a specific timestamp
+     * 
+     * @param int $timestamp
+     * @return self
+     */
+    public function expiresAt(int $timestamp): self
+    {
+        $this->expiresIn = $timestamp - time();
+        return $this;
+    }
+
+    /**
+     * Build the signed URL
+     * 
+     * @return string
+     */
+    public function build(): string
+    {
+        // Add source and expiration to params
+        $this->params['source'] = $this->sourceId;
+        $this->params['exp'] = time() + $this->expiresIn;
+
+        // Build URL without signature
+        $protocol = $this->useHttps ? 'https' : 'http';
+        $baseUrl = $protocol . '://' . $this->domain . '/' . $this->path;
+        $queryString = $this->buildQueryString();
+        
+        // Create string to sign
+        $stringToSign = '/' . $this->path . '?' . $queryString;
+        
+        // Generate signature
+        $signature = hash_hmac('sha256', $stringToSign, $this->psk);
+        
+        // Add signature to params
+        $this->params['sig'] = $signature;
+        
+        // Build final URL
+        return $baseUrl . '?' . $this->buildQueryString();
+    }
+
+    /**
+     * Validate a signed URL
+     * 
+     * @param string $url
+     * @param string $psk
+     * @return bool
+     */
+    public static function validate(string $url, string $psk): bool
+    {
+        $parsedUrl = parse_url($url);
+        if (!$parsedUrl || !isset($parsedUrl['query'])) {
+            return false;
+        }
+
+        parse_str($parsedUrl['query'], $params);
+        
+        // Check required parameters
+        if (!isset($params['sig'], $params['exp'], $params['source'])) {
+            return false;
+        }
+
+        // Check expiration
+        if (time() > (int)$params['exp']) {
+            return false;
+        }
+
+        // Recreate signature
+        $signature = $params['sig'];
+        unset($params['sig']);
+        
+        $queryString = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        $stringToSign = $parsedUrl['path'] . '?' . $queryString;
+        
+        $expectedSignature = hash_hmac('sha256', $stringToSign, $psk);
+        
+        return hash_equals($expectedSignature, $signature);
+    }
+}
