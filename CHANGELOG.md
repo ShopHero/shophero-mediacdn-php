@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-30
+
+### Changed
+- Updated fit modes to match backend: `inside`, `fill`, `crop`, `cover` (removed `clip`, `contain`, `pad`, `scale`)
+- Removed `avif` from supported formats (backend does not support AVIF output yet)
+- Removed `dpr()` method (not supported by backend)
+
+### Added
+- `rotate(int $degrees)` method for 90/180/270 degree rotation
+- `flip(string $direction)` method for horizontal/vertical flipping
+- `blur(float $radius)` method for Gaussian blur (0.1-100)
+
+### Fixed
+- Updated tests to match current SignedUrlBuilder constructor (removed sourceId parameter)
+
 ## [1.2.0] - 2025-07-10
 
 ### Added
@@ -63,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expiring URLs support
 - PSK rotation capability
 
-[Unreleased]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.2.1...v1.3.0
 [1.2.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.0.0...v1.1.0

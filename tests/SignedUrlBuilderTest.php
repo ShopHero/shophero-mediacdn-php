@@ -11,22 +11,20 @@ class SignedUrlBuilderTest extends TestCase
 {
     private string $domain = 'cdn.example.com';
     private string $path = '/secure/image.jpg';
-    private string $sourceId = 'test-source';
     private string $psk = 'test-psk-key';
 
     public function testSignedUrlGeneration(): void
     {
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder->build();
 
-        $this->assertStringContainsString('source=test-source', $url);
         $this->assertStringContainsString('exp=', $url);
         $this->assertStringContainsString('sig=', $url);
     }
 
     public function testSignatureValidation(): void
     {
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder->expiresIn(3600)->build();
 
         $isValid = SignedUrlBuilder::validate($url, $this->psk);
@@ -35,7 +33,7 @@ class SignedUrlBuilderTest extends TestCase
 
     public function testExpiredUrlValidation(): void
     {
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder->expiresIn(-1)->build(); // Already expired
 
         $isValid = SignedUrlBuilder::validate($url, $this->psk);
@@ -44,7 +42,7 @@ class SignedUrlBuilderTest extends TestCase
 
     public function testInvalidSignatureValidation(): void
     {
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder->build();
 
         $isValid = SignedUrlBuilder::validate($url, 'wrong-psk');
@@ -53,7 +51,7 @@ class SignedUrlBuilderTest extends TestCase
 
     public function testSignedUrlWithTransformations(): void
     {
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder
             ->resize(800, 600)
             ->quality(85)
@@ -73,7 +71,7 @@ class SignedUrlBuilderTest extends TestCase
     public function testExpiresAtMethod(): void
     {
         $futureTime = time() + 3600;
-        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->sourceId, $this->psk);
+        $builder = new SignedUrlBuilder($this->domain, $this->path, $this->psk);
         $url = $builder->expiresAt($futureTime)->build();
 
         $parsedUrl = parse_url($url);

@@ -1,7 +1,7 @@
 {
     "name": "shophero/mediacdn-php",
     "description": "PHP client library for ShopHero MediaCDN - A high-performance image CDN with on-the-fly transformations",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "type": "library",
     "keywords": ["cdn", "image", "media", "transformation", "shophero", "imgix", "cloudinary"],
     "homepage": "https://github.com/ShopHero/shophero-mediacdn-php",

@@ -47,7 +47,7 @@ class UrlBuilderTest extends TestCase
 
     public function testFitModes(): void
     {
-        $validFits = ['clip', 'crop', 'scale', 'fill', 'cover', 'contain', 'pad'];
+        $validFits = ['inside', 'fill', 'crop', 'cover'];
         
         foreach ($validFits as $fit) {
             $url = $this->builder->fit($fit)->build();
@@ -71,7 +71,6 @@ class UrlBuilderTest extends TestCase
             ->quality(90)
             ->format('webp')
             ->fit('cover')
-            ->dpr(2.0)
             ->build();
 
         $this->assertStringContainsString('w=1200', $url);
@@ -79,7 +78,6 @@ class UrlBuilderTest extends TestCase
         $this->assertStringContainsString('q=90', $url);
         $this->assertStringContainsString('f=webp', $url);
         $this->assertStringContainsString('fit=cover', $url);
-        $this->assertStringContainsString('dpr=2', $url);
     }
 
     public function testCustomParameters(): void

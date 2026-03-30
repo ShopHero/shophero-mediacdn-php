@@ -77,13 +77,13 @@ class UrlBuilder
     /**
      * Set output format
      * 
-     * @param string $format Supported: auto, jpeg, jpg, png, webp, avif
+     * @param string $format Supported: auto, jpeg, jpg, png, webp
      * @return self
      * @throws \InvalidArgumentException
      */
     public function format(string $format): self
     {
-        $allowedFormats = ['auto', 'jpeg', 'jpg', 'png', 'webp', 'avif'];
+        $allowedFormats = ['auto', 'jpeg', 'jpg', 'png', 'webp'];
         if (!in_array($format, $allowedFormats, true)) {
             throw new \InvalidArgumentException('Invalid format. Supported formats: ' . implode(', ', $allowedFormats));
         }
@@ -94,13 +94,13 @@ class UrlBuilder
     /**
      * Set fit mode
      * 
-     * @param string $fit Supported: clip, crop, scale, fill, cover, contain, pad
+     * @param string $fit Supported: inside, fill, crop, cover
      * @return self
      * @throws \InvalidArgumentException
      */
     public function fit(string $fit): self
     {
-        $allowedFits = ['clip', 'crop', 'scale', 'fill', 'cover', 'contain', 'pad'];
+        $allowedFits = ['inside', 'fill', 'crop', 'cover'];
         if (!in_array($fit, $allowedFits, true)) {
             throw new \InvalidArgumentException('Invalid fit mode. Supported modes: ' . implode(', ', $allowedFits));
         }
@@ -109,24 +109,56 @@ class UrlBuilder
     }
 
     /**
-     * Set device pixel ratio
-     * 
-     * @param float $dpr
+     * Set rotation (90, 180, or 270 degrees)
+     *
+     * @param int $degrees
      * @return self
      * @throws \InvalidArgumentException
      */
-    public function dpr(float $dpr): self
+    public function rotate(int $degrees): self
     {
-        if ($dpr < 0.1 || $dpr > 8) {
-            throw new \InvalidArgumentException('DPR must be between 0.1 and 8');
+        if (!in_array($degrees, [90, 180, 270], true)) {
+            throw new \InvalidArgumentException('Rotation must be 90, 180, or 270 degrees');
         }
-        $this->params['dpr'] = $dpr;
+        $this->params['rot'] = $degrees;
+        return $this;
+    }
+
+    /**
+     * Flip the image
+     *
+     * @param string $direction 'h' for horizontal, 'v' for vertical
+     * @return self
+     * @throws \InvalidArgumentException
+     */
+    public function flip(string $direction): self
+    {
+        if (!in_array($direction, ['h', 'v'], true)) {
+            throw new \InvalidArgumentException('Flip direction must be "h" or "v"');
+        }
+        $this->params['flip'] = $direction;
+        return $this;
+    }
+
+    /**
+     * Apply Gaussian blur
+     *
+     * @param float $radius Blur radius (0.1-100)
+     * @return self
+     * @throws \InvalidArgumentException
+     */
+    public function blur(float $radius): self
+    {
+        if ($radius < 0.1 || $radius > 100) {
+            throw new \InvalidArgumentException('Blur radius must be between 0.1 and 100');
+        }
+        $this->params['blur'] = $radius;
         return $this;
     }
 
     /**
      * Enable or disable HTTPS
-     * 
+     *
      * @param bool $useHttps
      * @return self
      */
