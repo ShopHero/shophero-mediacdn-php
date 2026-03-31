@@ -77,13 +77,13 @@ class UrlBuilder
     /**
      * Set output format
      * 
-     * @param string $format Supported: auto, jpeg, jpg, png, webp
+     * @param string $format Supported: auto, jpeg, jpg, png, webp, avif
      * @return self
      * @throws \InvalidArgumentException
      */
     public function format(string $format): self
     {
-        $allowedFormats = ['auto', 'jpeg', 'jpg', 'png', 'webp'];
+        $allowedFormats = ['auto', 'jpeg', 'jpg', 'png', 'webp', 'avif'];
         if (!in_array($format, $allowedFormats, true)) {
             throw new \InvalidArgumentException('Invalid format. Supported formats: ' . implode(', ', $allowedFormats));
         }
