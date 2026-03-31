@@ -44,7 +44,7 @@ cat > composer.json << 'EOF'
         }
     ],
     "require": {
-        "shophero/mediacdn-php": "^1.0"
+        "shophero/mediacdn-php": "^1.4"
     }
 }
 EOF
@@ -66,7 +66,7 @@ Once published, users can install the package by adding this to their `composer.
         }
     ],
     "require": {
-        "shophero/mediacdn-php": "^1.0"
+        "shophero/mediacdn-php": "^1.4"
     }
 }
 ```
