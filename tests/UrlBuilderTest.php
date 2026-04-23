@@ -47,12 +47,18 @@ class UrlBuilderTest extends TestCase
 
     public function testFitModes(): void
     {
-        $validFits = ['inside', 'fill', 'crop', 'cover'];
-        
+        $validFits = ['inside', 'contain', 'fill', 'crop', 'cover'];
+
         foreach ($validFits as $fit) {
             $url = $this->builder->fit($fit)->build();
             $this->assertStringContainsString('fit=' . $fit, $url);
         }
+    }
+
+    public function testInvalidFitModeThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->builder->fit('invalid');
     }
 
     public function testHttpsToggle(): void

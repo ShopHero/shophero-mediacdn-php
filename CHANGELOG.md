@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-04-23
+
+### Added
+- `contain` as an accepted fit mode (alias for `inside`, matches CSS `object-fit: contain` / Imgix naming). Image handler treats `contain` identically to `inside` (scale to fit within bounds while preserving aspect ratio).
+
 ## [1.4.0] - 2026-03-31
 
 ### Added

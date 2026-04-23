@@ -93,14 +93,14 @@ class UrlBuilder
 
     /**
      * Set fit mode
-     * 
-     * @param string $fit Supported: inside, fill, crop, cover
+     *
+     * @param string $fit Supported: inside, contain, fill, crop, cover
      * @return self
      * @throws \InvalidArgumentException
      */
     public function fit(string $fit): self
     {
-        $allowedFits = ['inside', 'fill', 'crop', 'cover'];
+        $allowedFits = ['inside', 'contain', 'fill', 'crop', 'cover'];
         if (!in_array($fit, $allowedFits, true)) {
             throw new \InvalidArgumentException('Invalid fit mode. Supported modes: ' . implode(', ', $allowedFits));
         }
