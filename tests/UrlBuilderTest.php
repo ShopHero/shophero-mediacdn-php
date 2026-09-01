@@ -61,6 +61,74 @@ class UrlBuilderTest extends TestCase
         $this->builder->fit('invalid');
     }
 
+    /**
+     * Fit modes retired in v1.3.0 must throw rather than pass through. The
+     * image handler silently falls back to `inside` for anything it does not
+     * recognise, so an accepted-but-unsupported mode would ship a wrong-looking
+     * image instead of an error.
+     *
+     * @see lambda/image-handler/index.py - `if fit_mode not in (...)`
+     */
+    public function testRetiredFitModesAreRejected(): void
+    {
+        foreach (['clip', 'scale', 'pad'] as $retired) {
+            try {
+                $this->builder->fit($retired);
+                $this->fail("fit('" . $retired . "') should throw - the image handler no longer supports it");
+            } catch (\InvalidArgumentException $e) {
+                $this->assertStringContainsString('Invalid fit mode', $e->getMessage());
+            }
+        }
+    }
+
+    public function testRotate(): void
+    {
+        foreach ([90, 180, 270] as $degrees) {
+            $url = $this->builder->rotate($degrees)->build();
+            $this->assertStringContainsString('rot=' . $degrees, $url);
+        }
+    }
+
+    public function testInvalidRotationThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->builder->rotate(45);
+    }
+
+    public function testFlip(): void
+    {
+        $this->assertStringContainsString('flip=h', $this->builder->flip('h')->build());
+        $this->assertStringContainsString('flip=v', $this->builder->flip('v')->build());
+    }
+
+    public function testInvalidFlipDirectionThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->builder->flip('diagonal');
+    }
+
+    public function testBlur(): void
+    {
+        $url = $this->builder->blur(2.5)->build();
+        $this->assertStringContainsString('blur=2.5', $url);
+    }
+
+    public function testInvalidBlurRadiusThrows(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->builder->blur(101);
+    }
+
+    /**
+     * Removed in v1.3.0: the image handler never read `dpr`, so a URL carrying
+     * it was silently ignored. Asserted so a future change cannot quietly
+     * reintroduce it.
+     */
+    public function testDprIsGone(): void
+    {
+        $this->assertFalse(method_exists(UrlBuilder::class, 'dpr'));
+    }
+
     public function testHttpsToggle(): void
     {
         $httpsUrl = $this->builder->setUseHttps(true)->build();

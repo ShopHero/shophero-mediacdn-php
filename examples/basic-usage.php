@@ -36,10 +36,11 @@ $thumbnailUrl = $client->createUrl('/samples/product.jpg')
 echo "Thumbnail URL:\n";
 echo $thumbnailUrl . "\n\n";
 
-// High DPI image
+// High DPI image. There is no `dpr` parameter — the image handler never read
+// one, and dpr() was removed from this client in v1.3.0. Request the pixel
+// width you actually want and let the img tag's CSS size it back down.
 $retinaUrl = $client->createUrl('/samples/logo.png')
-    ->width(200)
-    ->dpr(2.0)
+    ->width(400) // 200 CSS px at 2x
     ->build();
 
 echo "Retina URL:\n";

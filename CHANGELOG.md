@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-09-01
+
+### Fixed
+- `examples/basic-usage.php` no longer calls `dpr()`, which was removed in v1.3.0 — the example fataled with "Call to undefined method". It now requests the pixel width directly (`width(400)` for 200 CSS px at 2x), since the image handler has never had a `dpr` parameter.
+
+### Added
+- Test coverage for `rotate()`, `flip()`, and `blur()`, which shipped in v1.3.0 untested.
+- `testRetiredFitModesAreRejected` — asserts `clip`, `scale`, and `pad` throw. The image handler silently falls back to `inside` for unrecognised fit modes, so an accepted-but-unsupported mode would ship a wrong-looking image rather than an error.
+- `testDprIsGone` — guards against `dpr()` being reintroduced.
+
 ## [1.5.0] - 2026-04-23
 
 ### Added
@@ -87,7 +97,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expiring URLs support
 - PSK rotation capability
 
-[Unreleased]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.2.1...v1.3.0
 [1.2.0]: https://github.com/ShopHero/shophero-mediacdn-php/compare/v1.1.1...v1.2.0
